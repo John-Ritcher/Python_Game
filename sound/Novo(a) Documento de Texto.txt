@@ -1,0 +1,86 @@
+import pygame
+
+pygame.init()
+pygame.mixer.init()
+
+# Screen setup
+WIDTH, HEIGHT = 500, 400
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Pygame Menu")
+
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+# Load sound and music
+sound_effect = pygame.mixer.Sound("sound.wav")
+pygame.mixer.music.load("music.mp3")
+
+# Settings
+sound_on = True
+music_on = True
+pygame.mixer.music.play(-1)  # Play background music loop
+
+# Font setup
+font = pygame.font.Font(None, 36)
+
+# Menu States
+MENU_MAIN = "main"
+MENU_OPTIONS = "options"
+current_menu = MENU_MAIN
+
+def draw_button(text, x, y, active):
+    color = (0, 255, 0) if active else (255, 0, 0)
+    pygame.draw.rect(screen, color, (x, y, 200, 50))
+    label = font.render(text, True, WHITE)
+    screen.blit(label, (x + 15, y + 10))
+
+running = True
+while running:
+    screen.fill(BLACK)
+
+    if current_menu == MENU_MAIN:
+        draw_button("Start Game", 150, 100, True)
+        draw_button("Options", 150, 200, True)
+    elif current_menu == MENU_OPTIONS:
+        draw_button("Sound: ON" if sound_on else "Sound: OFF", 150, 100, sound_on)
+        draw_button("Music: ON" if music_on else "Music: OFF", 150, 200, music_on)
+        draw_button("Back", 150, 300, True)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos
+            if current_menu == MENU_MAIN:
+                if 150 <= x <= 350 and 100 <= y <= 150:
+                    print("Game Started!")  # Replace with actual game loop
+                elif 150 <= x <= 350 and 200 <= y <= 250:
+                    current_menu = MENU_OPTIONS
+            elif current_menu == MENU_OPTIONS:
+                if 150 <= x <= 350 and 100 <= y <= 150:
+                    sound_on = not sound_on
+                elif 150 <= x <= 350 and 200 <= y <= 250:
+                    music_on = not music_on
+                    if music_on:
+                        pygame.mixer.music.play(-1)
+                    else:
+                        pygame.mixer.music.stop()
+                elif 150 <= x <= 350 and 300 <= y <= 350:
+                    current_menu = MENU_MAIN
+
+    pygame.display.flip()
+
+pygame.quit()
+How This Works:
+Main Menu: Shows "Start Game" and "Options."
+
+Options Menu: Allows toggling sound and music.
+
+Clicking "Start Game" prints a message (replace this with your actual game logic).
+
+Clicking "Options" leads to the Options screen where sound settings can be toggled.
+
+Clicking "Back" returns to the Main Menu.
+
+Would you like to add animations or custom graphics? Let’s make it even better! 🚀🎮
